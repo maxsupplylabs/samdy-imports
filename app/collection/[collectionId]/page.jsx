@@ -36,7 +36,7 @@ export default async function Page({ params }) {
     <div className="">
       <div>
         <SeeOtherCollections topCollections={topCollections} />
-        <ProductsCard productsInCollection={productsInCollection} />
+        <ProductsCard collectionId={collectionId} />
       </div>
     </div>
   );

@@ -3,7 +3,7 @@ import * as React from "react";
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { IoFilter } from "react-icons/io5";
 
@@ -23,7 +23,7 @@ import { MdOutlineLocalOffer } from "react-icons/md";
 import { RiShip2Line } from "react-icons/ri";
 
 
-import { incrementProductViews } from "@/utils/functions";
+import { incrementProductViews, getDocumentsInCollectionRealTime, fetchProductsInCollection } from "@/utils/functions";
 
 import ShareButton from "@/components/ui/share-button";
 
@@ -106,8 +106,27 @@ function SortingButtons({ sortOption, onValueChange }) {
   );
 }
 
-export default function ProductsCard({ productsInCollection }) {
+export default function ProductsCard({ collectionId }) {
   const [sortOption, setSortOption] = useState('mostRecent');
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    // Subscribe to real-time updates for the "products" collection
+    const unsubscribeUploadedCollections = getDocumentsInCollectionRealTime("products", (count) => {
+      setProducts(count);
+    });
+
+    return () => {
+      // Cleanup subscriptions when the component unmounts
+      unsubscribeUploadedCollections();
+    };
+  }, []);
+
+  const productsInCollection = fetchProductsInCollection(
+    products,
+    collectionId
+  );
+
 
   function handleValueChange(value) {
     setSortOption(value);

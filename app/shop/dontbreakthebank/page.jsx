@@ -19,7 +19,7 @@ export default async function Page() {
   }
   return (
       <div>
-        <ProductsCard productsInCollection={productsInCollection} />
+        {/* <ProductsCard productsInCollection={productsInCollection} /> */}
     </div>
   );
 }
