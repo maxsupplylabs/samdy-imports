@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { incrementProductViews } from "@/utils/functions";
 import { Separator } from "@/components/ui/separator";
+import { useAllCollections } from "@/hooks/useAllCollections";
 
 import {
   initializeUserInFirestore,
@@ -34,7 +35,17 @@ import {
   // SheetTrigger,
 } from "@/components/ui/sheet";
 
-export default function Collections({ collections }) {
+export default function Collections() {
+  const { collections, isLoading, isError } = useAllCollections();
+  if(isLoading) {
+    return <div>Loading...</div>
+  }
+
+  if(isError) {
+    return <div>Error loading data</div>
+  }
+
+
   useEffect(() => {
     // Check if the user has a unique identifier in localStorage
     const userId = localStorage.getItem("userId");

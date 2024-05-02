@@ -4,12 +4,43 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { RiShip2Line } from "react-icons/ri";
-import { incrementProductViews, limitString, updateBrowserHistory } from "@/utils/functions";
-export default function Explore({ allProducts, productsInWatches, productsInBagsAndLuggage, productsInHomeAndKitchen }) {
+import { fetchProductsInDepartments, limitString, updateBrowserHistory } from "@/utils/functions";
+import { useAllProducts } from "@/hooks/useAllProducts"
+
+export default function Explore() {
   const [selectedTab, setSelectedTab] = useState("recommendation");
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 100; // Number of products to display per page
 
+  const { products, isLoading, isError } = useAllProducts();
+//  console.log(products)
+ if (isLoading) {
+  return <div>Loading...</div>;
+}
+
+if (isError) {
+  return <div>Error Loading data</div>;
+}
+
+const productsInShoes = fetchProductsInDepartments(products, [
+  "mensShoes",
+  "womensShoes",
+]);
+
+
+const productsInBagsAndLuggage = fetchProductsInDepartments(
+  products,
+  ["mensBagsAndLuggage", "womensBagsAndLuggage"]
+);
+const productsInWatches = fetchProductsInDepartments(products, [
+  "mensWatches",
+  "womensWatches",
+]);
+
+const productsInHomeAndKitchen = fetchProductsInDepartments(
+  products,
+  ["homeAndKitchen", ""]
+);
   const handleTabClick = (tabName) => {
     setSelectedTab(tabName);
     setCurrentPage(1); // Reset currentPage when switching tabs
@@ -18,7 +49,7 @@ export default function Explore({ allProducts, productsInWatches, productsInBags
     {
       key: "recommendation",
       label: "All Categories",
-      products: allProducts,
+      products: products,
     },
     {
       key: "watches",
@@ -122,7 +153,7 @@ export default function Explore({ allProducts, productsInWatches, productsInBags
         ))}
       </div>
       {/* Pagination */}
-      <div className="flex justify-center mt-4">
+      {/* <div className="flex justify-center mt-4">
         {selectedTabData.products.length > productsPerPage && (
           <ul className="flex">
             {Array.from({ length: Math.ceil(selectedTabData.products.length / productsPerPage) }, (_, index) => (
@@ -138,7 +169,7 @@ export default function Explore({ allProducts, productsInWatches, productsInBags
             ))}
           </ul>
         )}
-      </div>
+      </div> */}
     </div>
   );
 }

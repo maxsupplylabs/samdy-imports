@@ -11,32 +11,43 @@ import HomePageBanners from "@/components/ui/collection/homePageBanners";
 import TopBanner from "@/components/ui/top-banner";
 import { IoIosArrowForward } from "react-icons/io";
 import Explore from "@/components/ui/explore";
+import { useAllProducts } from "@/hooks/useAllProducts"
+import HomePageCollections from "@/components/ui/homepage-collections"
 
 export default function Page() {
-  const [products, setProducts] = useState([]);
-  const [top3CollectionsByViews, setTop3CollectionsByViews] = useState([]);
+  // const [products, setProducts] = useState([]);
+  // const [top3CollectionsByViews, setTop3CollectionsByViews] = useState([]);
+//  const { products, isLoading, isError } = useAllProducts();
+//  console.log(products)
+//  if (isLoading) {
+//   return <div>Loading...</div>;
+// }
 
-  useEffect(() => {
-    // Subscribe to real-time updates for the "products" collection
-    const unsubscribeUploadedCollections = getDocumentsInCollectionRealTime("products", (count) => {
-      setProducts(count);
-    });
+// if (isError) {
+//   return <div>Error Loading data</div>;
+// }
 
-        // Fetch top 3 collections by views
-        const fetchTopCollections = async () => {
-          const collections = await fetchTop4CollectionsByViews("collections", 10);
-          setTop3CollectionsByViews(collections);
-        };
-        fetchTopCollections();
+  // useEffect(() => {
+  //   // Subscribe to real-time updates for the "products" collection
+  //   const unsubscribeUploadedCollections = getDocumentsInCollectionRealTime("products", (count) => {
+  //     setProducts(count);
+  //   });
 
-    return () => {
-      // Cleanup subscriptions when the component unmounts
-      unsubscribeUploadedCollections();
-    };
-  }, []);
+  //       // Fetch top 3 collections by views
+  //       const fetchTopCollections = async () => {
+  //         const collections = await fetchTop4CollectionsByViews("collections", 10);
+  //         setTop3CollectionsByViews(collections);
+  //       };
+  //       fetchTopCollections();
+
+  //   return () => {
+  //     // Cleanup subscriptions when the component unmounts
+  //     unsubscribeUploadedCollections();
+  //   };
+  // }, []);
 
   // console.log(products.length);
-  const allProducts = fetchAllDocumentsInCollection("products");
+  // const allProducts = fetchAllDocumentsInCollection("products");
 
 
   // const top3CollectionsByViews = fetchTop4CollectionsByViews(
@@ -44,30 +55,31 @@ export default function Page() {
   //   4
   // );
 
-  const productsInShoes = fetchProductsInDepartments(products, [
-    "mensShoes",
-    "womensShoes",
-  ]);
+  // const productsInShoes = fetchProductsInDepartments(products, [
+  //   "mensShoes",
+  //   "womensShoes",
+  // ]);
 
-  const productsInBagsAndLuggage = fetchProductsInDepartments(
-    products,
-    ["mensBagsAndLuggage", "womensBagsAndLuggage"]
-  );
-  const productsInWatches = fetchProductsInDepartments(products, [
-    "mensWatches",
-    "womensWatches",
-  ]);
+  // const productsInBagsAndLuggage = fetchProductsInDepartments(
+  //   products,
+  //   ["mensBagsAndLuggage", "womensBagsAndLuggage"]
+  // );
+  // const productsInWatches = fetchProductsInDepartments(products, [
+  //   "mensWatches",
+  //   "womensWatches",
+  // ]);
 
-  const productsInHomeAndKitchen = fetchProductsInDepartments(
-    products,
-    ["homeAndKitchen", ""]
-  );
+  // const productsInHomeAndKitchen = fetchProductsInDepartments(
+  //   products,
+  //   ["homeAndKitchen", ""]
+  // );
   return (
     <>
       <TopBanner />
       <HomePageBanners />
       <Separator className='py-1 bg-gray-100' />
-      <section>
+      <HomePageCollections />
+      {/* <section>
         <Link href={'/collection'} className="flex items-center mb-2 w-min ml-2 pt-2">
           <h1 className="text-lg font-medium">
             <span>Collections</span>
@@ -109,15 +121,15 @@ export default function Page() {
             </>
           )}
         </div>
-      </section>
+      </section> */}
       <Separator className='py-1 bg-gray-100' />
       <section>
         <Explore
-          allProducts={products}
-          productsInWatches={productsInWatches}
-          productsInBagsAndLuggage={productsInBagsAndLuggage}
-          productsInHomeAndKitchen={productsInHomeAndKitchen}
-          productsInShoes={productsInShoes}
+          // allProducts={products}
+          // productsInWatches={productsInWatches}
+          // productsInBagsAndLuggage={productsInBagsAndLuggage}
+          // productsInHomeAndKitchen={productsInHomeAndKitchen}
+          // productsInShoes={productsInShoes}
         />
       </section>
     </>

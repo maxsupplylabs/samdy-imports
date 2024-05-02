@@ -1,8 +1,8 @@
 import useSWR from 'swr';
-import { getAllProduts } from '@/utils/functions';
+import { getAllProducts } from '@/utils/functions';
 
 export function useAllProducts() {
-  const { data, error } = useSWR('allProducts', getAllProduts);
+  const { data, error } = useSWR('allProducts', getAllProducts);
 
   return {
     products: data,

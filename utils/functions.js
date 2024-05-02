@@ -747,7 +747,7 @@ export async function fetchTop4CollectionsByViews(collectionName, limitNumber) {
   }
 }
 
-/**Function to fetch products in a specified collection using the  */
+/**Function to fetch products in a specified collection using the collection Id */
 export function fetchProductsInCollection(products, collectionId) {
   return products.filter(
     (product) =>
@@ -907,7 +907,7 @@ export async function getDocumentCount() {
 }
 
 /** Function to get all products documents */
-export async function getAllProduts() {
+export async function getAllProducts() {
   try {
     const querySnapshot = await getDocs(collection(db, 'products'));
     const documents = [];
@@ -1769,6 +1769,29 @@ export const getAllCollections = async () => {
   } catch (error) {
     console.error("Error fetching collections:", error);
     throw error;
+  }
+};
+
+/**This function returns 10 of documents in a specified collections */
+export const getTop10Collections = async () => {
+  try {
+    const q = query(
+      collection(db, 'collections'),
+      orderBy("views", "desc"), // Order by views in descending order
+      limit(10) // Limit the result to the top collections
+    );
+
+    const querySnapshot = await getDocs(q);
+    const topCollections = [];
+
+    querySnapshot.forEach((doc) => {
+      topCollections.push({ id: doc.id, ...doc.data() });
+    });
+
+    return topCollections; // Array of top collections by views
+  } catch (error) {
+    console.error("Error fetching top collections by views:", error);
+    return null; // Error occurred
   }
 };
 

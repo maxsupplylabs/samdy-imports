@@ -21,6 +21,7 @@ const SelectValue = SelectPrimitive.Value;
 import { GiLaurelsTrophy } from "react-icons/gi";
 import { MdOutlineLocalOffer } from "react-icons/md";
 import { RiShip2Line } from "react-icons/ri";
+import { useAllProducts } from "@/hooks/useAllProducts"
 
 
 import { incrementProductViews, getDocumentsInCollectionRealTime, fetchProductsInCollection } from "@/utils/functions";
@@ -108,19 +109,30 @@ function SortingButtons({ sortOption, onValueChange }) {
 
 export default function ProductsCard({ collectionId }) {
   const [sortOption, setSortOption] = useState('mostRecent');
-  const [products, setProducts] = useState([]);
+  // const [products, setProducts] = useState([]);
 
-  useEffect(() => {
-    // Subscribe to real-time updates for the "products" collection
-    const unsubscribeUploadedCollections = getDocumentsInCollectionRealTime("products", (count) => {
-      setProducts(count);
-    });
+  const { products, isLoading, isError } = useAllProducts();
+  //  console.log(products)
+   if (isLoading) {
+    return <div>Loading...</div>;
+  }
+  
+  if (isError) {
+    return <div>Error Loading data</div>;
+  }
+  
 
-    return () => {
-      // Cleanup subscriptions when the component unmounts
-      unsubscribeUploadedCollections();
-    };
-  }, []);
+  // useEffect(() => {
+  //   // Subscribe to real-time updates for the "products" collection
+  //   const unsubscribeUploadedCollections = getDocumentsInCollectionRealTime("products", (count) => {
+  //     setProducts(count);
+  //   });
+
+  //   return () => {
+  //     // Cleanup subscriptions when the component unmounts
+  //     unsubscribeUploadedCollections();
+  //   };
+  // }, []);
 
   const productsInCollection = fetchProductsInCollection(
     products,
