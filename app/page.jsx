@@ -1,7 +1,9 @@
-import Today from "@/components/today";
+"use client"
+import { useEffect } from "react";
+import { useState } from "react";
 import { fetchProductsInDepartments } from "@/utils/functions";
 import { fetchAllDocumentsInCollection } from "@/utils/functions";
-import { fetchTop4CollectionsByViews, fetchProductsInCollectionWithSpecifiedPricePoint } from "@/utils/functions";
+import { fetchTop4CollectionsByViews, getDocumentsInCollectionRealTime } from "@/utils/functions";
 import Image from "next/image";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
@@ -10,32 +12,54 @@ import TopBanner from "@/components/ui/top-banner";
 import { IoIosArrowForward } from "react-icons/io";
 import Explore from "@/components/ui/explore";
 
-export default async function Page() {
-  const allProducts = await fetchAllDocumentsInCollection("products");
+export default function Page() {
+  const [products, setProducts] = useState([]);
+  const [top3CollectionsByViews, setTop3CollectionsByViews] = useState([]);
 
-  // const productsInCollectionWithSpecifiedPricePoint = await fetchProductsInCollectionWithSpecifiedPricePoint(allProducts, '', 15)
+  useEffect(() => {
+    // Subscribe to real-time updates for the "products" collection
+    const unsubscribeUploadedCollections = getDocumentsInCollectionRealTime("products", (count) => {
+      setProducts(count);
+    });
 
-  const top3CollectionsByViews = await fetchTop4CollectionsByViews(
-    "collections",
-    10
-  );
+        // Fetch top 3 collections by views
+        const fetchTopCollections = async () => {
+          const collections = await fetchTop4CollectionsByViews("collections", 10);
+          setTop3CollectionsByViews(collections);
+        };
+        fetchTopCollections();
 
-  const productsInShoes = await fetchProductsInDepartments(allProducts, [
+    return () => {
+      // Cleanup subscriptions when the component unmounts
+      unsubscribeUploadedCollections();
+    };
+  }, []);
+
+  // console.log(products.length);
+  const allProducts = fetchAllDocumentsInCollection("products");
+
+
+  // const top3CollectionsByViews = fetchTop4CollectionsByViews(
+  //   "collections",
+  //   4
+  // );
+
+  const productsInShoes = fetchProductsInDepartments(products, [
     "mensShoes",
     "womensShoes",
   ]);
 
-  const productsInBagsAndLuggage = await fetchProductsInDepartments(
-    allProducts,
+  const productsInBagsAndLuggage = fetchProductsInDepartments(
+    products,
     ["mensBagsAndLuggage", "womensBagsAndLuggage"]
   );
-  const productsInWatches = await fetchProductsInDepartments(allProducts, [
+  const productsInWatches = fetchProductsInDepartments(products, [
     "mensWatches",
     "womensWatches",
   ]);
 
-  const productsInHomeAndKitchen = await fetchProductsInDepartments(
-    allProducts,
+  const productsInHomeAndKitchen = fetchProductsInDepartments(
+    products,
     ["homeAndKitchen", ""]
   );
   return (
@@ -89,7 +113,7 @@ export default async function Page() {
       <Separator className='py-1 bg-gray-100' />
       <section>
         <Explore
-          allProducts={allProducts}
+          allProducts={products}
           productsInWatches={productsInWatches}
           productsInBagsAndLuggage={productsInBagsAndLuggage}
           productsInHomeAndKitchen={productsInHomeAndKitchen}
