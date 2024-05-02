@@ -316,7 +316,7 @@ const Bag = () => {
               </div>
               <div className="flex flex-col justify-center text-center mx-4 text-xs">
                 <p>
-                  Kindly remember to make payment to 0202733443 - Samantha Abubakar.
+                  Kindly remember to make payment to 0202733443 or 0543282790 - Samantha Abubakar.
                 </p>
               </div>
               <div className="max-w-[90%] md:max-w-[35%] mx-auto my-3">

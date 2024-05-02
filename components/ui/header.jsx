@@ -26,7 +26,6 @@ export default function Header() {
             Samdy Imports
           </Link>
         </div>
-
         <div>
           <Link className="" href={"/bag"}>
             <div>
