@@ -37,7 +37,7 @@ import {
 } from "@/utils/functions";
 
 // Constants
-const WHATSAPP_NUMBER = "233592771234";
+const WHATSAPP_NUMBER = "233543282790";
 
 const generateOrderMessage = (items) => {
   return items
@@ -310,13 +310,13 @@ const Bag = () => {
             <div className="fixe top-20 md:left-[300px] left-0 right-0 pt-4 z-50 bg-white border-b">
               <div className="flex justify-center items-center flex-col px-2 py-3">
                 <h2 className="font-semibold text-xl">
-                  Your cart total is <span className="">GHc</span>
+                  Your bag total is <span className="">GHc</span>
                   {totalPriceInCart}
                 </h2>
               </div>
               <div className="flex flex-col justify-center text-center mx-4 text-xs">
                 <p>
-                  ...
+                  Make payment to 0202733443 - Samantha Abubakar
                 </p>
               </div>
               <div className="max-w-[90%] md:max-w-[35%] mx-auto my-3">
