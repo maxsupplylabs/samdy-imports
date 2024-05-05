@@ -35,17 +35,7 @@ import {
   // SheetTrigger,
 } from "@/components/ui/sheet";
 
-export default function Collections() {
-  const { collections, isLoading, isError } = useAllCollections();
-  if(isLoading) {
-    return <div>Loading...</div>
-  }
-
-  if(isError) {
-    return <div>Error loading data</div>
-  }
-
-
+export default function Collections({ collections }) {
   useEffect(() => {
     // Check if the user has a unique identifier in localStorage
     const userId = localStorage.getItem("userId");
@@ -243,14 +233,6 @@ export default function Collections() {
           </Sheet>
         </div>
         <div>
-          {filteredCollections.length === 0 ? (
-            <div className="flex flex-col justify-center min-h-[70vh] items-center mt-6">
-              <p className="font-semibold">No collections found</p>
-              <p className="text-sm">
-                All collections curated by editors will appear here.
-              </p>
-            </div>
-          ) : (
             <div className="grid grid-cols-4 md:grid-cols-7 gap-x-4 gap-y-4 px-2 pb-6">
               {filteredCollections.map((collection) => (
                 <div key={collection.id}>
@@ -320,7 +302,6 @@ export default function Collections() {
                 </div>
               ))}
             </div>
-          )}
         </div>
       </div>
     </>
