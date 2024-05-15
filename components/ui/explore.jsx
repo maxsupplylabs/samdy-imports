@@ -88,7 +88,7 @@ useEffect(() => {
     setSelectedTab(tabName);
     setCurrentPage(1); // Reset currentPage when switching tabs
           // Update the URL query parameter to reflect the selected tab
-          router.push(`/?xp_tab=${tabName}`, undefined, { shallow: true });
+          router.push(`/?xp_tab=${tabName}`, { scroll: false });
   };
   const tabs = [
     {
