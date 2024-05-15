@@ -1050,6 +1050,46 @@ export async function fetchDocumentFromFirestore(collectionName, documentId) {
   }
 }
 
+export async function fetchProduct(productId) {
+  try {
+    const docRef = doc(db, "products", productId);
+    const docSnap = await getDoc(docRef);
+
+    // Check if the document exists
+    if (docSnap.exists()) {
+      return docSnap.data();
+    } else {
+      console.log("Document does not exist");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching document from Firestore:", error);
+    throw error;
+  }
+}
+
+// Function to fetch a specific document from a Firestore collection in real-time
+export async function fetchDocumentFromFirestoreRealtime(collectionName, documentId, callback) {
+  try {
+    const docRef = doc(db, collectionName, documentId);
+    const unsubscribe = onSnapshot(docRef, (docSnap) => {
+      if (docSnap.exists()) {
+        callback(docSnap.data());
+      } else {
+        console.log("Document does not exist.");
+        callback(null);
+      }
+    });
+
+    // Return the unsubscribe function to stop listening to changes
+    return unsubscribe;
+  } catch (error) {
+    console.error("Error fetching document from Firestore:", error);
+    throw error;
+  }
+}
+
+
 // Function to fetch a specific document from a Firestore collection in real-time
 export function listenToDocumentFromFirestore(collectionName, documentId, callback) {
   try {

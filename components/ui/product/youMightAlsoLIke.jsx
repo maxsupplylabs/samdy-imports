@@ -27,7 +27,7 @@ export default function YouMightAlsoLIke({ productsInCollection }) {
   return (
     <div>
       <div className="flex px-2 my-2">
-        <h1 className="text-lg font-semibold">You might also like</h1>
+        <h1 className="text-lg font-semibold">You may also like</h1>
       </div>
       <div className="flex grid-cols-4 -[100px_minmax(100px,_1fr)] overflow-auto md:grid md:grid-cols-4 hide-scrollbar gap-x-1.5 gap-y-1.5 px-2 mb-8">
         {productsInCollection.map((product) => (

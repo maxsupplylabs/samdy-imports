@@ -12,10 +12,10 @@ export default async function Page({ params }) {
   const collectionId = await fetchCollectionId(productId);
   const similarProducts = await fetchSimilarProducts(collectionId, productId);
 
-  if (!product) {
-    // Handle case where the product is not found
-    return null;
-  }
+  // if (!product) {
+  //   // Handle case where the product is not found
+  //   return null;
+  // }
 
   if (!collectionId) {
     // Handle case where the collection ID is not found
@@ -24,7 +24,7 @@ export default async function Page({ params }) {
 
   return (
     <div>
-      <ProductDetails product={product} />
+      <ProductDetails productId={productId} />
       <YouMightAlsoLIke productsInCollection={similarProducts} />
     </div>
   );
