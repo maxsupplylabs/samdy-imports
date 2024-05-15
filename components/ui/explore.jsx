@@ -1,49 +1,94 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { RiShip2Line } from "react-icons/ri";
-import { fetchProductsInDepartments, limitString, updateBrowserHistory } from "@/utils/functions";
+import { fetchProductsInDepartments, limitString } from "@/utils/functions";
 import { useAllProducts } from "@/hooks/useAllProducts"
+import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 export default function Explore() {
-  const [selectedTab, setSelectedTab] = useState("recommendation");
+  const initialSelectedTab = localStorage.getItem("selectedTab");
+  const [selectedTab, setSelectedTab] = useState(initialSelectedTab);
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 100; // Number of products to display per page
 
+  // Retrieve the selected department ID from localStorage if available
+  const [selectedTabOnLoc, setSelectedTabOnLoc] = useState(initialSelectedTab || "recommendation");
+
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    // Save the selected tab to localStorage whenever it changes
+    localStorage.setItem("selectedTab", selectedTabOnLoc);
+}, [selectedTabOnLoc]);
+
+useEffect(() => {
+    // Restore the selected tab from the URL query parameter if available
+    const tab = searchParams.get("xp_tab");
+    if (tab) {
+        setSelectedTabOnLoc(tab);
+    }
+}, [searchParams]);
+
   const { products, isLoading, isError } = useAllProducts();
-//  console.log(products)
- if (isLoading) {
-  return <div>Loading...</div>;
-}
+  //  console.log(products)
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
-if (isError) {
-  return <div>Error Loading data</div>;
-}
+  if (isError) {
+    return <div>Error Loading data</div>;
+  }
 
-const productsInShoes = fetchProductsInDepartments(products, [
-  "mensShoes",
-  "womensShoes",
-]);
+  const productsInShoes = fetchProductsInDepartments(products, [
+    "mensShoes",
+    "womensShoes",
+  ]);
 
 
-const productsInBagsAndLuggage = fetchProductsInDepartments(
-  products,
-  ["mensBagsAndLuggage", "womensBagsAndLuggage"]
-);
-const productsInWatches = fetchProductsInDepartments(products, [
-  "mensWatches",
-  "womensWatches",
-]);
+  const productsInBagsAndLuggage = fetchProductsInDepartments(
+    products,
+    ["mensBagsAndLuggage", "womensBagsAndLuggage"]
+  );
+  const productsInWatches = fetchProductsInDepartments(products, [
+    "mensWatches",
+    "womensWatches",
+  ]);
 
-const productsInHomeAndKitchen = fetchProductsInDepartments(
-  products,
-  ["homeAndKitchen", ""]
-);
+  const productsInHomeAndKitchen = fetchProductsInDepartments(
+    products,
+    ["homeAndKitchen", ""]
+  );
+
+  const productsInClothing = fetchProductsInDepartments(
+    products,
+    ["mensClothing", "womensClothing"]
+  );
+
+  const productsInAccessories = fetchProductsInDepartments(
+    products,
+    ["mensAccessories", "womensAccessories"]
+  );
+
+  const productsInElectronics = fetchProductsInDepartments(
+    products,
+    ["electronics", ""]
+  );
+
+  const productsInAppliances = fetchProductsInDepartments(
+    products,
+    ["appliances", ""]
+  );
   const handleTabClick = (tabName) => {
     setSelectedTab(tabName);
     setCurrentPage(1); // Reset currentPage when switching tabs
+          // Update the URL query parameter to reflect the selected tab
+          router.push(`/?xp_tab=${tabName}`, undefined, { shallow: true });
   };
   const tabs = [
     {
@@ -52,19 +97,46 @@ const productsInHomeAndKitchen = fetchProductsInDepartments(
       products: products,
     },
     {
-      key: "watches",
-      label: "Watches",
-      products: productsInWatches,
-    },
-    {
       key: "bagsAndLuggage",
       label: "Bags & Luggage",
       products: productsInBagsAndLuggage,
     },
     {
+      key: "accessories",
+      label: "Accessories",
+      products: productsInAccessories,
+    },
+    {
+      key: "watches",
+      label: "Watches",
+      products: productsInWatches,
+    },
+
+    {
       key: "homeAndKitchen",
       label: "Home & Kitchen",
       products: productsInHomeAndKitchen,
+    },
+    {
+      key: "shoes",
+      label: "Shoes",
+      products: productsInShoes,
+    },
+    {
+      key: "clothing",
+      label: "Clothing",
+      products: productsInClothing,
+    },
+
+    {
+      key: "electronics",
+      label: "Electronics",
+      products: productsInElectronics,
+    },
+    {
+      key: "appliances",
+      label: "Appliances",
+      products: productsInAppliances,
     },
   ];
 
@@ -135,8 +207,7 @@ const productsInHomeAndKitchen = fetchProductsInDepartments(
                     <p className="font-semibold text-[#000000]">
                       GHc{product.price}
                     </p>
-                    {product.market_price === 0 ||
-                      product.market_price === "0" || product.market_price === "" ? null : (
+                    {product.market_price === 0 || isNaN(product.market_price) ? "" : (
                       <div className="flex justify-center items-center gap-1">
                         <p className="text-xs text-black/40">
                           <span className="line-through">

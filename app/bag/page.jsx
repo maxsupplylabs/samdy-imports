@@ -19,7 +19,6 @@ import { clsx } from "clsx";
 import { lusitana } from "@/components/ui/fonts";
 import { cva } from "class-variance-authority";
 import { Separator } from "@/components/ui/separator";
-
 const SheetClose = SheetPrimitive.Close;
 const Sheet = SheetPrimitive.Root;
 const SheetPortal = SheetPrimitive.Portal;
@@ -34,6 +33,7 @@ import {
   updateUserInFirestore,
   addOrdersToFirestore,
   addBuyerPersonalInfo,
+  placeOrder
 } from "@/utils/functions";
 
 // Constants
@@ -383,39 +383,42 @@ const Bag = () => {
                           )}
                         </div>
                         <div className="">
-                          <Link
-                            href={`${whatsappUrl}`}
+                        <Link
+                          href={`${whatsappUrl}`}
                             onClick={async (e) => {
+                              e.preventDefault();
+
                               if (!isInfoComplete) {
-                                e.preventDefault();
                                 return; // Do not proceed with the click event if isInfoComplete is false
                               }
-
-                              e.preventDefault();
 
                               try {
                                 // Set loading to true when starting the async operation
                                 setLoading(true);
-                                await addBuyerPersonalInfo(buyerInfo)
 
-                                await addOrdersToFirestore(bagItems);
-                                setTimeout(
-                                  () => (window.location.href = `${whatsappUrl}`),
-                                  1000
-                                );
+                                // Execute all asynchronous functions simultaneously
+                                await Promise.all([
+                                  addBuyerPersonalInfo(buyerInfo),
+                                  addOrdersToFirestore(bagItems),
+                                  placeOrder(buyerInfo, bagItems)
+                                ]);
                               } catch (error) {
                                 // Handle any errors here, e.g., display an error message
+                                console.error("Error:", error);
                               } finally {
                                 // Set loading to false when the async operation is complete
                                 setLoading(false);
                               }
+                              setTimeout(
+                                () => (window.location.href = `${whatsappUrl}`),
+                                1000
+                              );
                             }}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                            disabled={loading || !isInfoComplete}
                             className={`${loading || !isInfoComplete
-                              ? "cursor-not-allowed opacity-50 bg-green-200 text-gray-500"
-                              : "bg-green-500 text-white"
-                              } py-4 flex justify-center items-center gap-3 rounded-lg`}
+                                ? "cursor-not-allowed opacity-50 bg-green-200 text-gray-500"
+                                : "bg-green-500 text-white"
+                              } py-4 flex justify-center items-center w-full gap-3 rounded-lg`}
                           >
                             {loading ? (
                               <span>Loading...</span>
@@ -424,9 +427,7 @@ const Bag = () => {
                                 <span className="block">
                                   <FaWhatsapp className="text-4xl" />
                                 </span>
-                                <span className="block text-center">
-                                  Proceed to WhatsApp
-                                </span>
+                                <span className="block text-center">Proceed to WhatsApp</span>
                               </>
                             )}
                           </Link>

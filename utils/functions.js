@@ -1839,6 +1839,42 @@ export const addProductToStore = async (data, productId) => {
   }
 };
 
+export async function placeOrder(buyerInfo, bagItems) {
+  const batch = writeBatch(db);
+
+  try {
+    // Iterate through each bag item
+    for (const bagItem of bagItems) {
+      const orderData = {
+        productId: bagItem.productId,
+        name: bagItem.name,
+        price: bagItem.price,
+        quantity: bagItem.quantity,
+        variations: bagItem.variations,
+        image: bagItem.images,
+        isFreeShipping: bagItem.isFreeShipping,
+        timestamp: serverTimestamp(),
+        paid: false,
+        moq: bagItem.moq, 
+        buyerName: buyerInfo.name,
+        buyerLocation: buyerInfo.location,
+        buyerPhone: buyerInfo.phone,
+      };
+
+      // Add a new document to the "orders" collection
+      const orderRef = await addDoc(collection(db, 'orders'), orderData);
+      batch.set(orderRef, orderData); // Add order data to batch
+    }
+
+    // Commit the batch operation
+    await batch.commit();
+    console.log("Orders placed successfully!");
+  } catch (error) {
+    console.error("Error placing orders:", error);
+    // Handle error gracefully, e.g., show error message to user
+  }
+}
+
 export const editProductInStore = async (data, productId) => {
   try {
     const productsCollectionRef = collection(db, "products");
