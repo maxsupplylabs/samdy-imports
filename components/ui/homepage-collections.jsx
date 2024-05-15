@@ -22,7 +22,13 @@ export default function HomePageCollections() {
           </h1>
           <span><IoIosArrowForward className="text-lg" /></span>
         </Link>
-        <div className="m-auto overflow-auto pb-2 hide-scrollbar">
+        {collections.length != 0 && <div className="flex flex-col justify-center min-h-[10vh] items-center mt-6">
+        <p className="font-semibold">No collection found</p>
+        <p className="text-xs">
+          Updates coming soon...
+        </p>
+      </div>}
+        {/* <div className="m-auto overflow-auto pb-2 hide-scrollbar">
               <div className="grid grid-cols-5 grid-rows-2 md:grid md:grid-cols-7 gap-x-4 gap-y-2 w-max">
                 {collections.map((collection) => (
                   <Link
@@ -47,7 +53,7 @@ export default function HomePageCollections() {
                   </Link>
                 ))}
               </div>
-        </div>
+        </div> */}
       </section>
   );
 }
