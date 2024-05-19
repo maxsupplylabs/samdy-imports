@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useStateContext } from "@/context/state-context";
 import Image from "next/image";
+import Link from "next/link";
 import { Separator } from "../separator";
 import {
   handleAddToBagClick,
@@ -12,6 +13,15 @@ import {
 } from "@/utils/functions";
 import { useProduct } from "@/hooks/useProduct"
 import { RiShip2Line } from "react-icons/ri";
+
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
 
 import {
   Carousel,
@@ -84,7 +94,7 @@ function CarouselDemo({ product }) {
 }
 
 export default function ProductDetails({ productId }) {
-  
+
   const {
     bagItems,
     addToBag,
@@ -124,7 +134,7 @@ export default function ProductDetails({ productId }) {
       updateUserInFirestore("productDetailsPage");
     }
   }, []); // Empty dependency array ensures the effect runs only once on mount
-  
+
   if (isLoading) {
     return (
       <div className="mt-3 px-2 md:hidden">
@@ -152,6 +162,19 @@ export default function ProductDetails({ productId }) {
         <div className="flex flex-col md:flex-row md:gap-16">
           {/* Desktop */}
           <CarouselDemo product={product} />
+          <Breadcrumb className="my-2">
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link href="/">Home</Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>Product</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
           {/* Mobile */}
           <div className="flex sm:hidden overflow-auto gap-2 hide-scrollbar">
             <ProductImageCarousel

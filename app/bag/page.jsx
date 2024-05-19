@@ -26,6 +26,14 @@ const SheetTrigger = SheetPrimitive.Trigger;
 
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
 
 import { FaWhatsapp } from "react-icons/fa";
 import {
@@ -297,6 +305,19 @@ const Bag = () => {
   return (
     <div className="overflow-hidden">
       <div>
+      <Breadcrumb className="my-2 mx-4">
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link href="/">Home</Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>Your bag</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
         {bagItems.length === 0 ? (
           <div>
             <div className="flex flex-col justify-center items-center h-[80vh] text-center mx-4">

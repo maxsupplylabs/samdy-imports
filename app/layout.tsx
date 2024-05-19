@@ -18,6 +18,7 @@ const roboto = Roboto({
 });
 
 export const metadata = {
+  metadataBase: new URL("https://samdyimports.vercel.app"),
   title: "Samdy Imports",
   description: "",
 };
