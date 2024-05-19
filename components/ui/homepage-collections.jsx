@@ -4,6 +4,7 @@ import Link from "next/link";
 import { IoIosArrowForward } from "react-icons/io";
 import { useTop10Collections } from "@/hooks/useTop10Collections"
 
+import { incrementProductViews } from "@/utils/functions"
 export default function HomePageCollections() {
  const { collections, isLoading, isError } = useTop10Collections();
  if (isLoading) {
@@ -35,7 +36,12 @@ export default function HomePageCollections() {
                     className="flex flex-col justify-center items-center"
                     key={collection.id}
                     href={`/collection/${collection.id}`}
+                    onClick={() =>
+                      incrementProductViews("collections", collection.id)
+                    }
                   >
+                    {collection.images.length > 0 ? (
+
                       <div className="w-[4rem] h-[4rem] md:min-w-[6rem] md:min-h-[6rem]">
                         <Image
                           className="w-full h-full object-cover rounded-full"
@@ -45,6 +51,17 @@ export default function HomePageCollections() {
                           alt=""
                         />
                       </div>
+                      ) : (
+                        <div className="w-[4rem] h-[4rem] md:min-w-[6rem] md:min-h-[6rem]">
+                          <Image
+                          className="w-full h-full object-cover rounded-full"
+                          src={"/placeholder-image.jpeg"}
+                          width={500}
+                          height={500}
+                          alt=""
+                        />
+                        </div>
+                      )}
                     <div className="flex items-center min-h-[40px]">
                       <p className="text-center w-20 line-clamp-2 text-xs md:text-sm font-medium">
                         {collection.title}

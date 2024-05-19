@@ -148,20 +148,14 @@ export default function ProductsCard({ collectionId }) {
 
   if (productsInCollection.length === 0) {
     // Handle case when no products are found for the collection
-    return <p>No products found for this collection</p>;
+    return <div className="flex flex-col text-sm justify-center items-center h-[40vh]">
+      <h2>The selected collection has no products.</h2>
+      <p>Shop other collection.</p>
+    </div>;
   }
   return (
-    <div className="bg-gradient-to-t from-gray-100">
-      <div className="flex justify-between items-center px-2 my-2 sticky top-0">
-      <SortingButtons sortOption={sortOption} onValueChange={handleValueChange} />
-
-        <div className="flex justify-center items-center">
-          <div>
-            <ShareButton text={""} />
-          </div>
-        </div>
-      </div>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-1.5 gap-y-1.5 px-2 pb-8">
+    <div className="bg-gradient-to-t from-gray-100 mt-2">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-1.5 gap-y-1.5 px-2 pb-1">
         {sortedProducts.map((product) => (
           <Link
             className="rounded-[2px] min-h-[8rem] bg-white md:hover:shadow-md"
@@ -187,22 +181,22 @@ export default function ProductsCard({ collectionId }) {
             } // Call the function on click
           >
             <div className="flex flex-col justify-start items-center">
-              <div className="relative w-full pt-[130%]">
+              <div className="relative w-full pt-[100%]">
                 <Image
-                  className="absolute w-full h-full top-0 left-0 object-cover rounded-t-[2px]"
+                  className="absolute w-full h-full top-0 left-0 object-cover"
                   src={product.images[0].src}
                   width={500}
                   height={500}
                   alt=""
                 />
-               {/* {product.isFreeShipping && (
-                      <div className="absolute bottom-0 flex items-center gap-1 text-[#fff] text-xs bg-red-600 w-full px-2">
+               {product.isFreeShipping && (
+                      <div className="absolute bottom-0 flex items-center gap-1 bg-green-50 text-xs text-green-700 w-full px-2">
                         <RiShip2Line className="text-sm" />
-                        <p className="text-white px-1 md:text-sm">
+                        <p className="text-green-700 px-1 md:text-sm">
                         {product.isFreeShipping ? `Free shipping` : ""}
                       </p>
                       </div>
-                    )} */}
+                    )}
               </div>
               <div className="py-1 px-2 w-full flex flex-col items-start">
                 <h3 className="text-xs md:text-sm text-left">
