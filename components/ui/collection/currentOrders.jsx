@@ -34,7 +34,7 @@ export default function CurrentOrders() {
     return null
   }
   return (
-    <Link href="/current-batch-orders" className="m-2 pb-2 px-1 bg-gradient-to-b from-pink-300 from-5% via-white via-25% to-white to-90% rounded-sm">
+    <Link href="/current-batch-orders" className="m-2 px-1 bg-gradient-to-b from-pink-300 from-5% via-white via-25% to-white to-90% rounded-sm">
       <div className="flex justify-between items-center py-1">
       <h1 className="font-semibold italic">Batch Orders</h1>
       <div className="flex items-center gap-1 opacity-70 text-sm">
@@ -42,8 +42,9 @@ export default function CurrentOrders() {
         <IoIosArrowForward />
       </div>
       </div>
-      <div className="m-auto overflow-auto pb-2 hide-scrollbar">
-        <div className="grid grid-cols-8 md:grid md:grid-cols-7 gap-x-1 gap-y-2 w-max">
+      <div className="m-auto overflow-auto hide-scrollbar">
+        {/* Grid cols will be adjusted to 10 soon */}
+        <div className="grid grid-cols-5 md:grid md:grid-cols-7 gap-x-1 gap-y-2 w-max">
           {filteredOrders.map((product) => (
             <div
               className="flex flex-col justify-center items-center"

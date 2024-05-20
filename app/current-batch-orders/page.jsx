@@ -7,6 +7,8 @@ import { RiShip2Line } from "react-icons/ri";
 import {
     limitString,
   } from "@/utils/functions";
+  import Explore2 from "@/components/ui/explore2";
+  import { Separator } from "@/components/ui/separator"
 
 export default function Page() {
     const { orderedProducts, isLoading, isError } = useAllOrderedProducts();
@@ -42,10 +44,10 @@ export default function Page() {
     <div>
         <div className="flex flex-col justify-center items-center text-center p-2 bg-pink-300">
             <h1 className="text-lg font-semibold">Batch Orders</h1>
-            <p className="text-xs">We collect orders from customers over a month and then ship them from China to Ghana. The items listed below are currently being shipped to Ghana.</p>
-            <p className="text-xs">Tap on any item to order before the closing date.</p>
+            <p className="text-xs">We collect orders from customers over a month and then ship them from China to Ghana. <br /> The items listed below are currently going to be shipped to Ghana.</p>
         </div>
-        <div className="flex items-center justify-center py-2 gap-1 opacity-70 text-sm">
+            <p className="text-xs sticky top-[2.5rem] md:top-[49px] z-50 bg-pink-300 py-1 px-2 text-center">Tap on any item to order before the closing date.</p>
+        <div className="flex items-center justify-center py-2 gap-1 text-sm sticky top-[4rem] md:top-[49px] z-50 bg-white">
         <p>Closing on 10th June</p>
       </div>
         <div className="bg-gradient-to-t from-gray-100 mt-2">
@@ -53,7 +55,7 @@ export default function Page() {
         {filteredOrders.map((product) => (
           <Link
             className="rounded-[2px] min-h-[8rem] bg-white md:hover:shadow-md"
-            key={product.orders[0].productId}
+            key={product.orders[0].productId + product.orders[0].name}
             href={`/${product.orders[0].productId}`}
           >
             <div className="flex flex-col justify-start items-center">
@@ -85,14 +87,23 @@ export default function Page() {
                   MOQ {product.orders[0].moq}
                 </p>
                 <p className="line-clamp-2 text-xs md:text-sm text-black/60">
-                {new Set(product.orders.map(order => order.buyerName)).size} People ordered recently
+                {new Set(product.orders.map(order => order.buyerName)).size === 1 ? `${new Set(product.orders.map(order => order.buyerName)).size} Person` : `${new Set(product.orders.map(order => order.buyerName)).size} People` } ordered recently
                 </p>
               </div>
             </div>
           </Link>
         ))}
       </div>
+      <div className="flex items-center justify-center gap-4 py-4">
+        <Separator className="w-[35%]"/>
+        <p>End</p>
+        <Separator className="w-[35%]"/>
+      </div>
     </div>
+    <div className="mx-2 font-semibold py-1">
+        <h2>Explore more</h2>
+    </div>
+    <Explore2/>
     </div>
   );
 }

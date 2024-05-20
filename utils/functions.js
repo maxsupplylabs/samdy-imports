@@ -710,6 +710,12 @@ export const fetchProductsWithOrders = async () => {
     // Iterate through each order
     ordersQuerySnapshot.forEach((orderDoc) => {
       const orderData = orderDoc.data();
+
+      // Exclude orders where isAvailableInGhana is true
+      if (orderData.isAvailableInGhana) {
+        return;
+      }
+      
       const productId = orderData.productId;
 
       // Add order to the respective product's orders array
@@ -743,6 +749,12 @@ export const fetchProductsWithMostOrders = async () => {
     // Iterate through each order
     ordersQuerySnapshot.forEach((orderDoc) => {
       const orderData = orderDoc.data();
+
+      // Exclude orders where isAvailableInGhana is true
+      if (orderData.isAvailableInGhana) {
+        return;
+      }
+
       const productId = orderData.productId;
 
       // Add order to the respective product's orders array
@@ -759,7 +771,10 @@ export const fetchProductsWithMostOrders = async () => {
       orderCount: orders.length // Add the order count
     }));
 
-    return productsWithOrdersArray;
+    // Sort products by order count in descending order and take the top 5
+    const topProducts = productsWithOrdersArray.sort((a, b) => b.orderCount - a.orderCount).slice(0, 5);
+
+    return topProducts;
   } catch (error) {
     console.error("Error fetching products with orders:", error);
     throw error; // Rethrow the error so the caller can handle it
@@ -1961,6 +1976,7 @@ export async function placeOrder(buyerInfo, bagItems) {
         variations: bagItem.variations,
         image: bagItem.images,
         isFreeShipping: bagItem.isFreeShipping,
+        isAvailableInGhana: bagItem.isAvailableInGhana,
         timestamp: serverTimestamp(),
         paid: false,
         moq: bagItem.moq, 
