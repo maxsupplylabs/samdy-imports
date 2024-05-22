@@ -5,8 +5,8 @@ export const runtime = "edge";
 // Image metadata
 export const alt = "About Acme";
 export const size = {
-  width: 650,
-  height: 650,
+  width: 500,
+  height: 500,
 };
 export const contentType = "image/png";
 // Image generation
@@ -54,8 +54,8 @@ export default async function Image({ params }) {
           src={data?.img}
           alt={"name"}
           style={{
-            width: "650px",
-            height: "650px",
+            width: "500px",
+            height: "500px",
             // borderRadius: "14px",
             marginBottom: "10px",
           }}
